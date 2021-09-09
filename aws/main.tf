@@ -8,7 +8,7 @@ terraform {
     }
 
     databricks = {
-      source = "databrickslabs/databricks"
+      source  = "databrickslabs/databricks"
       version = "0.3.7"
     }
   }
@@ -17,7 +17,7 @@ terraform {
 
 provider "aws" {
   profile = var.aws_connection_profile
-  region = var.aws_region
+  region  = var.aws_region
 }
 
 provider "databricks" {
@@ -79,7 +79,7 @@ resource "aws_s3_bucket" "root_storage_bucket" {
 }
 
 resource "aws_s3_bucket_public_access_block" "root_storage_bucket" {
-  depends_on         = [
+  depends_on = [
     aws_s3_bucket.root_storage_bucket,
     aws_s3_bucket_policy.root_bucket_policy
   ]
@@ -123,9 +123,9 @@ module "vpc" {
   enable_nat_gateway   = true
   create_igw           = true
 
-  public_subnets  = [cidrsubnet(var.cidr_block, 3, 0)]
+  public_subnets = [cidrsubnet(var.cidr_block, 3, 0)]
   private_subnets = [cidrsubnet(var.cidr_block, 3, 1),
-                     cidrsubnet(var.cidr_block, 3, 2)]
+  cidrsubnet(var.cidr_block, 3, 2)]
 
   default_security_group_egress = [{
     cidr_blocks = "0.0.0.0/0"
@@ -173,13 +173,13 @@ output "databricks_host" {
 provider "databricks" {
   // in normal scenario you won't have to give providers aliases
   alias = "created_workspace"
-  host = databricks_mws_workspaces.this.workspace_url
+  host  = databricks_mws_workspaces.this.workspace_url
 }
 
 // create PAT token to provision entities within workspace
 resource "databricks_token" "pat" {
-  provider = databricks.created_workspace
-  comment  = "Terraform Provisioning"
+  provider         = databricks.created_workspace
+  comment          = "Terraform Provisioning"
   lifetime_seconds = 86400
 }
 
@@ -209,14 +209,14 @@ resource "aws_s3_bucket" "data_storage_bucket" {
 }
 
 resource "aws_s3_bucket_public_access_block" "data_storage_bucket" {
-  depends_on         = [
+  depends_on = [
     aws_s3_bucket.data_storage_bucket,
   ]
 
-  bucket             = aws_s3_bucket.data_storage_bucket.id
-  ignore_public_acls = true
-  block_public_acls   = true
-  block_public_policy = true
+  bucket                  = aws_s3_bucket.data_storage_bucket.id
+  ignore_public_acls      = true
+  block_public_acls       = true
+  block_public_policy     = true
   restrict_public_buckets = true
 }
 
@@ -239,9 +239,9 @@ data "aws_iam_policy_document" "assume_role_for_ec2" {
 
 data "aws_iam_policy_document" "read_write_bucket" {
   statement {
-    effect = "Allow"
-    actions = ["s3:ListBucket"]
-    resources = formatlist( "arn:aws:s3:::%s", var.read_write_s3_buckets )
+    effect    = "Allow"
+    actions   = ["s3:ListBucket"]
+    resources = formatlist("arn:aws:s3:::%s", var.read_write_s3_buckets)
   }
 
   statement {
@@ -252,16 +252,16 @@ data "aws_iam_policy_document" "read_write_bucket" {
       "s3:DeleteObject",
       "s3:PutObjectAcl"
     ]
-    resources = formatlist( "arn:aws:s3:::%s/*", var.read_write_s3_buckets )
+    resources = formatlist("arn:aws:s3:::%s/*", var.read_write_s3_buckets)
   }
 }
 
 
 data "aws_iam_policy_document" "read_only_bucket" {
   statement {
-    effect = "Allow"
-    actions = ["s3:ListBucket"]
-    resources = formatlist( "arn:aws:s3:::%s", var.read_only_s3_buckets )
+    effect    = "Allow"
+    actions   = ["s3:ListBucket"]
+    resources = formatlist("arn:aws:s3:::%s", var.read_only_s3_buckets)
   }
 
   statement {
@@ -269,7 +269,7 @@ data "aws_iam_policy_document" "read_only_bucket" {
     actions = [
       "s3:GetObject",
     ]
-    resources = formatlist( "arn:aws:s3:::%s/*", var.read_only_s3_buckets )
+    resources = formatlist("arn:aws:s3:::%s/*", var.read_only_s3_buckets)
   }
 }
 
@@ -281,11 +281,11 @@ resource "aws_iam_role" "role_for_s3_access" {
   description        = "Role for shared access"
   assume_role_policy = data.aws_iam_policy_document.assume_role_for_ec2.json
   inline_policy {
-    name = "read_only_bucket"
+    name   = "read_only_bucket"
     policy = data.aws_iam_policy_document.read_only_bucket.json
   }
   inline_policy {
-    name = "read_write_bucket"
+    name   = "read_write_bucket"
     policy = data.aws_iam_policy_document.read_write_bucket.json
   }
 

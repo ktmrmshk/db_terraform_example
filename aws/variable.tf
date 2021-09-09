@@ -1,20 +1,20 @@
 
 variable "aws_connection_profile" {
   description = "The name of the AWS connection profile to use."
-  type = string
-  default = "default"
+  type        = string
+  default     = "default"
 }
 
 variable "aws_region" {
   description = "The code of the AWS Region to use."
-  type = string
-  default = "ap-northeast-1"
+  type        = string
+  default     = "ap-northeast-1"
 }
 
 variable "databricks_connection_profile" {
   description = "The name of the Databricks connection profile to use."
-  type = string
-  default = "DEFAULT"
+  type        = string
+  default     = "DEFAULT"
 }
 
 
@@ -35,18 +35,18 @@ variable "cidr_block" {
 
 variable "read_write_s3_buckets" {
   description = "bucket name list of read_only_access: ex) [\"s3-bucket1\", \"s3-bucket2\"]"
-  type = list(string)
-  default = ["dummy_read_write_bucket"]
+  type        = list(string)
+  default     = ["dummy_read_write_bucket"]
 }
 
 variable "read_only_s3_buckets" {
   description = "bucket name list of read_only_access: ex) ['s3-bucket1', 's3-bucket2:]"
-  type = list(string)
-  default = ["dummy_read_only_bucket"]
+  type        = list(string)
+  default     = ["dummy_read_only_bucket"]
 }
 
 variable "user_prefix" {
-  default ="demo"
+  default = "demo"
 }
 
 resource "random_string" "naming" {
