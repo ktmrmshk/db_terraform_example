@@ -29,15 +29,15 @@ main.tf			secret.tfvars.template
 $ vim variable.tf  (もしくはお使いのテキストエディタで編集)
 
 variable "aws_connection_profile" {
-  description = "The name of the AWS connection profile to use."
-  type = string
-  default = "default"
+  description  = "The name of the AWS connection profile to use."
+  type         = string
+  default      = "default"
 }
 
 variable "aws_region" {
   description = "The code of the AWS Region to use."
-  type = string
-  default = "ap-northeast-1"
+  type        = string
+  default     = "ap-northeast-1"
 }
 ...
 ...
@@ -56,7 +56,7 @@ $ vim secret.tfvars  (もしくはお使いのテキストエディタで編集)
 
 databricks_account_username = "your_accout_owner@example.com"
 databricks_account_password = "xxxxxxxxxxxxxxxxxxx"
-databricks_account_id = "xxxxxxxx-xxxx-xxxxx-xxxxx-xxxxxxxxxxx"
+databricks_account_id       = "xxxxxxxx-xxxx-xxxxx-xxxxx-xxxxxxxxxxx"
 ```
 
 以上が設定が必要な項目になりますので、移行はTerraformを実行していきます。
