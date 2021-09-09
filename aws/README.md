@@ -43,7 +43,13 @@ variable "aws_region" {
 ...
 ```
 
-続いて、`secret.tfavrs`のテンプレートからDatabricksのアカウント情報を設定ファイルを作成していきます。
+続いて、`secret.tfavrs`のテンプレートから以下のDatabricksのアカウント情報を設定ファイルを作成していきます。
+パスワードなどを含むファイルになりますので、取り扱いには注意してください。
+
+* `databricks_account_username`: Databricks Consoleにログインする際のメールアドレス
+* `databricks_account_password`: Databricks Consoleにログインする際のパスワード
+* `databricks_account_id`: DatabircksアカウントのID (Databricks Consoleから確認できます)
+
 ```bash
 $ cp secret.tfvars.template secret.tfvars
 $ vim secret.tfvars  (もしくはお使いのテキストエディタで編集)
@@ -82,9 +88,6 @@ $ terraform destroy -var-file="secret.tfvars"
 `variable.tf`
 * `aws_connection_profile`: AWS CLIを使用する際のCredetialのprofile名
 * `aws_region`: 構築するAWS Region
-* `databricks_account_username`: Databricks Consoleにログインする際のメールアドレス
-* `databricks_account_password`: Databricks Consoleにログインする際のパスワード
-* `databricks_account_id`: DatabircksアカウントのID (Databricks Consoleから確認できます)
 * `cidr_block` : 構築する際のVPCに使用するネットワークCIDR
 * `read_write_s3_buckets` : Databricksと連携させるS3バケツのリスト(Read Write)
 * `read_only_s3_buckets` : Databricksと連携させるS3バケツのリスト(Read Only)
@@ -92,6 +95,9 @@ $ terraform destroy -var-file="secret.tfvars"
 
 
 ### Resources
+
+以下のResourceを構築します。
+(手動でデプロイする場合の順に並べてあります)
 
  1. Cross Account IAM Role
  2. S3 Root Bucket
