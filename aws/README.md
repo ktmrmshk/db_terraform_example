@@ -13,7 +13,7 @@
 
 Tarraformのテンプレートをダウンロードします。
 ```bash
-$ git https://github.com/ktmrmshk/db_terraform_example.git
+$ git clone https://github.com/ktmrmshk/db_terraform_example.git
 
 $ cd db_terraform_example
 $ cd aws
@@ -23,7 +23,7 @@ README.md		variable.tf
 main.tf			secret.tfvars.template
 ```
 
-`variable.tf`のヘッダ部分にある変数を適宜設定します。
+`variable.tf`の変数を適宜設定します。
 
 ```bash
 $ vim variable.tf  (もしくはお使いのテキストエディタで編集)
@@ -61,7 +61,7 @@ databricks_account_id       = "xxxxxxxx-xxxx-xxxxx-xxxxx-xxxxxxxxxxx"
 
 以上が設定が必要な項目になりますので、移行はTerraformを実行していきます。
 
-Terraformのの初期化(初回のみ)
+Terraformの初期化(初回のみ)
 ```bash
 $ terraform init
 ```
