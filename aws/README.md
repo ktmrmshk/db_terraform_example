@@ -12,18 +12,21 @@
 
 
 Tarraformのテンプレートをダウンロードします。
-``` 
-$ git 
+```bash
+$ git https://github.com/ktmrmshk/db_terraform_example.git
 
-$ cd databricks_mwc_terraform
+$ cd db_terraform_example
+$ cd aws
 $ ls
 
+README.md		variable.tf
+main.tf			secret.tfvars.template
 ```
 
-`main.mf`のヘッダ部分にある変数を適宜設定します。
+`variable.tf`のヘッダ部分にある変数を適宜設定します。
 
-```
-$ vim main.mf  (もしくはお使いのテキストエディタで編集)
+```bash
+$ vim variable.tf  (もしくはお使いのテキストエディタで編集)
 
 variable "aws_connection_profile" {
   description = "The name of the AWS connection profile to use."
@@ -40,29 +43,43 @@ variable "aws_region" {
 ...
 ```
 
-Terraformのの初期化(初回のみ)
+続いて、`secret.tfavrs`のテンプレートからDatabricksのアカウント情報を設定ファイルを作成していきます。
+```bash
+$ cp secret.tfvars.template secret.tfvars
+$ vim secret.tfvars  (もしくはお使いのテキストエディタで編集)
+
+databricks_account_username = "your_accout_owner@example.com"
+databricks_account_password = "xxxxxxxxxxxxxxxxxxx"
+databricks_account_id = "xxxxxxxx-xxxx-xxxxx-xxxxx-xxxxxxxxxxx"
 ```
+
+以上が設定が必要な項目になりますので、移行はTerraformを実行していきます。
+
+Terraformのの初期化(初回のみ)
+```bash
 $ terraform init
 ```
 
-問題なければTerraformを実行して環境を構築する。
-この実行によってAWS上にDatabricksのWorkspaceが構築される。
-```
-$ terraform apply
+問題なければTerraformを実行して環境を構築します。
+この実行によってAWS上にDatabricksのWorkspaceが構築されます。
+```bash
+$ terraform apply -var-file="secret.tfvars"
 ```
 
 環境を削除するには以下を実行する(実行には注意してください)
-```
-$ terraform destroy
+```bash
+$ terraform destroy -var-file="secret.tfvars"
 ```
 
 
 ## 説明
 
-### 変数設定
+### Variables
+
 
 デプロイする際の設定値を指定していきます。
 
+`variable.tf`
 * `aws_connection_profile`: AWS CLIを使用する際のCredetialのprofile名
 * `aws_region`: 構築するAWS Region
 * `databricks_account_username`: Databricks Consoleにログインする際のメールアドレス
@@ -73,6 +90,15 @@ $ terraform destroy
 * `read_only_s3_buckets` : Databricksと連携させるS3バケツのリスト(Read Only)
 * `user_prefix`: Workspaceのリソース名で使うプレフィックス文字列
 
+
+### Resources
+
+ 1. Cross Account IAM Role
+ 2. S3 Root Bucket
+ 3. Custom VPC
+ 4. Workspace
+ 5. Bucket for Data writing
+ 6. Instance Profile for S3 Access from Clusters
 
 
 ## Reference

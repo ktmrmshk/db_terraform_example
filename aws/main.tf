@@ -105,7 +105,6 @@ resource "databricks_mws_storage_configurations" "this" {
 }
 
 
-/*************************************
 
 // ---- 3. Custom VPC -----
 
@@ -323,7 +322,6 @@ output "databricks_instance_profile" {
   value = aws_iam_instance_profile.shared.arn
 }
 
-*************************/
 
 ##
 ## resource "databricks_instance_profile" "this" {
