@@ -36,13 +36,16 @@ variable "cidr_block" {
 variable "read_write_s3_buckets" {
   description = "bucket name list of read_only_access: ex) [\"s3-bucket1\", \"s3-bucket2\"]"
   type        = list(string)
-  default     = ["dummy_read_write_bucket"]
+  default     = ["s3-bucket1", "s3-bucket2"]
+  #default     = []
 }
 
 variable "read_only_s3_buckets" {
-  description = "bucket name list of read_only_access: ex) ['s3-bucket1', 's3-bucket2:]"
+  description = "bucket name list of read_only_access: ex) [\"s3-bucket-readonly1\", \"s3-bucket-readonly2\"]"
   type        = list(string)
-  default     = ["dummy_read_only_bucket"]
+  default     = ["s3-bucket-readonly1", "s3-bucket-readonly2"]
+  #default     = []
+
 }
 
 variable "user_prefix" {

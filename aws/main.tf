@@ -204,7 +204,7 @@ resource "aws_s3_bucket" "data_storage_bucket" {
   }
   force_destroy = true
   tags = merge(var.tags, {
-    Name = "${local.prefix}-rootbucket"
+    Name = "${local.prefix}-databucket"
   })
 }
 
@@ -238,6 +238,8 @@ data "aws_iam_policy_document" "assume_role_for_ec2" {
 }
 
 data "aws_iam_policy_document" "read_write_bucket" {
+  count = length(var.read_write_s3_buckets) == 0 ? 0 : 1
+
   statement {
     effect    = "Allow"
     actions   = ["s3:ListBucket"]
@@ -258,6 +260,8 @@ data "aws_iam_policy_document" "read_write_bucket" {
 
 
 data "aws_iam_policy_document" "read_only_bucket" {
+  count = length(var.read_only_s3_buckets) == 0 ? 0 : 1
+
   statement {
     effect    = "Allow"
     actions   = ["s3:ListBucket"]
@@ -275,20 +279,31 @@ data "aws_iam_policy_document" "read_only_bucket" {
 
 
 
-
 resource "aws_iam_role" "role_for_s3_access" {
   name               = "${local.prefix}-shared-ec2-role-for-s3"
   description        = "Role for shared access"
   assume_role_policy = data.aws_iam_policy_document.assume_role_for_ec2.json
-  inline_policy {
-    name   = "read_only_bucket"
-    policy = data.aws_iam_policy_document.read_only_bucket.json
-  }
-  inline_policy {
-    name   = "read_write_bucket"
-    policy = data.aws_iam_policy_document.read_write_bucket.json
-  }
+  
 
+  dynamic "inline_policy" {
+    for_each = data.aws_iam_policy_document.read_only_bucket
+    iterator = ite
+
+    content {
+      name   = "read_only_bucket"
+      policy = ite.value.json
+    }
+  }
+  
+  dynamic "inline_policy" {
+    for_each = data.aws_iam_policy_document.read_write_bucket
+    iterator = ite
+    
+    content {
+      name   = "read_write_bucket"
+      policy = ite.value.json
+    }
+  }
 }
 
 data "aws_iam_policy_document" "pass_role_for_s3_access" {
