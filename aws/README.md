@@ -70,11 +70,25 @@ $ terraform init
 この実行によってAWS上にDatabricksのWorkspaceが構築されます。
 ```bash
 $ terraform apply -var-file="secret.tfvars"
+
+...
+...
+Apply complete! Resources: 36 added, 0 changed, 0 destroyed.
+
+Outputs:
+
+databricks_host = "https://xxxxxxxxx-demo08jmll.cloud.databricks.com"
+databricks_instance_profile = "arn:aws:iam::134567891234:instance-profile/shared-instance-profile"
+databricks_token = <sensitive>
 ```
 
 環境を削除するには以下を実行する(実行には注意してください)
 ```bash
 $ terraform destroy -var-file="secret.tfvars"
+
+...
+...
+Destroy complete! Resources: 36 destroyed.
 ```
 
 
