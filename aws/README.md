@@ -2,10 +2,10 @@
 
 ## 必要な環境
 
-* AWS CLIの実行環境
-* AWS Credential(上記のAWS CLIの実行のため)
-* Databricks Console([accounts.cloud.databricks.com](https://accounts.cloud.databricks.com/))にログインできるユーザー名/パスワード
-* Terraform実行環境
+* [AWS CLI](https://aws.amazon.com/jp/cli/)の実行環境
+* AWS Credential(通常は`~/.aws/credentials`に作成される。上記のAWS CLIの実行のため)
+* Databricks Onwer Account: Databricks Console([accounts.cloud.databricks.com](https://accounts.cloud.databricks.com/))にログインできるユーザー名/パスワード
+* [Terraform](https://www.terraform.io/)実行環境
 
 
 ## Terraformテンプレート
