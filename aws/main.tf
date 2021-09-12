@@ -174,6 +174,9 @@ provider "databricks" {
   // in normal scenario you won't have to give providers aliases
   alias = "created_workspace"
   host  = databricks_mws_workspaces.this.workspace_url
+
+  username = var.databricks_account_username
+  password = var.databricks_account_password
 }
 
 // create PAT token to provision entities within workspace
@@ -189,7 +192,11 @@ output "databricks_token" {
   sensitive = true
 }
 
-
+provider "databricks" {
+  alias = "created_workspace_with_pat"
+  host = databricks_mws_workspaces.this.workspace_url
+  token =  databricks_token.pat.token_value
+}
 
 
 
@@ -338,12 +345,17 @@ output "databricks_instance_profile" {
 }
 
 
-##
-## resource "databricks_instance_profile" "this" {
-##   instance_profile_arn = aws_iam_instance_profile.shared.arn
-## }
+resource "databricks_instance_profile" "this" {
+  provider         = databricks.created_workspace_with_pat
+  instance_profile_arn = aws_iam_instance_profile.shared.arn
+}
+
+
+
 ## 
 ## resource "databricks_cluster" "this" {
+##   provider         = databricks.created_workspace
+##
 ##   cluster_name            = "Shared Autoscaling"
 ##   spark_version           = "6.6.x-scala2.11"
 ##   node_type_id            = "i3.xlarge"
