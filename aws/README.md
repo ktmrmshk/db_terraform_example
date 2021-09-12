@@ -3,6 +3,7 @@
 Databricksのworkspaceは一つの独立したDatabricks環境を提供します。
 そのため、要件によっては複数のworkspaceを同時に作成・運用するケースもあります。
 こうした状況では、DatabricksのworkspaceをCodeとして管理(IaC)し、自動化することで運用がスムーズになります。
+
 Databricksでは、運用現場で求められる機能をツールとして提供する[Labs Project](https://databricks.com/learn/labs)の一環で、[Databricsk Terraform Provider](https://github.com/databrickslabs/terraform-provider-databricks)を公開しています。
 このドキュメントでは、Terraformを用いてAWS上にDatabricksのworkspaceを構築する方法を説明いたします。
 
@@ -35,7 +36,20 @@ main.tf			secret.tfvars.template
 
 ### デプロイに関するパラメータの設定
 
-`variable.tf`の変数を適宜設定します。
+`variable.tf`にデプロイする際の設定値を変数をとして定義してあります。
+
+
+`variable.tf`
+* `aws_connection_profile`: AWS CLIを使用する際のCredetialのprofile名
+* `aws_region`: 構築するAWS Region
+* `cidr_block` : 構築する際のVPCに使用するネットワークCIDR
+* `read_write_s3_buckets` : Databricksと連携させるS3バケツのリスト(Read Write)
+* `read_only_s3_buckets` : Databricksと連携させるS3バケツのリスト(Read Only)
+* `user_prefix`: Workspaceのリソース名で使うプレフィックス文字列
+
+
+ファイルを編集して、適宜設定していきます。
+
 
 ```bash
 $ vim variable.tf  (もしくはお使いのテキストエディタで編集)
@@ -63,6 +77,12 @@ variable "aws_region" {
 * `databricks_account_username`: Databricks Consoleにログインする際のメールアドレス
 * `databricks_account_password`: Databricks Consoleにログインする際のパスワード
 * `databricks_account_id`: DatabircksアカウントのID (Databricks Consoleから確認できます)
+
+
+DatabricksのアカウントIDは下記のようにconsole画面の左下メニューから確認できます。
+
+<img src="./docs/db_console_account_id.png" width="800">
+
 
 ```bash
 $ cp secret.tfvars.template secret.tfvars
@@ -98,6 +118,11 @@ databricks_instance_profile = "arn:aws:iam::134567891234:instance-profile/shared
 databricks_token = <sensitive>
 ```
 
+ここで作成した各種リソースはDatabrciks ConsoleやAWS ConsoleのUI上からも確認可能です。
+
+<img src="./docs/db_console_ws.png" width="800">
+
+
 ### workspaceの削除
 
 環境を削除するには以下を実行する(実行には注意してください)
@@ -111,19 +136,6 @@ Destroy complete! Resources: 36 destroyed.
 
 
 ## 説明
-
-### Variables
-
-
-デプロイする際の設定値を指定していきます。
-
-`variable.tf`
-* `aws_connection_profile`: AWS CLIを使用する際のCredetialのprofile名
-* `aws_region`: 構築するAWS Region
-* `cidr_block` : 構築する際のVPCに使用するネットワークCIDR
-* `read_write_s3_buckets` : Databricksと連携させるS3バケツのリスト(Read Write)
-* `read_only_s3_buckets` : Databricksと連携させるS3バケツのリスト(Read Only)
-* `user_prefix`: Workspaceのリソース名で使うプレフィックス文字列
 
 
 ### Resources
