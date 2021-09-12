@@ -1,4 +1,11 @@
-# TerraformによるDatabricks Workspace on AWSの環境構築
+# TerraformによるDatabricks Workspaceの環境構築(AWS編)
+
+Databricksのworkspaceは一つの独立したDatabricks環境を提供します。
+そのため、要件によっては複数のworkspaceを同時に作成・運用するケースもあります。
+こうした状況では、DatabricksのworkspaceをCodeとして管理(IaC)し、自動化することで運用がスムーズになります。
+Databricksでは、運用現場で求められる機能をツールとして提供する[Labs Project](https://databricks.com/learn/labs)の一環で、[Databricsk Terraform Provider](https://github.com/databrickslabs/terraform-provider-databricks)を公開しています。
+このドキュメントでは、Terraformを用いてAWS上にDatabricksのworkspaceを構築する方法を説明いたします。
+
 
 ## 必要な環境
 
@@ -8,13 +15,15 @@
 * [Terraform](https://www.terraform.io/)実行環境
 
 
-## Terraformテンプレート
+## 使用方法
 
+### Terraformテンプレートのダウンロード
 
 Tarraformのテンプレートをダウンロードします。
 ```bash
-$ git clone https://github.com/ktmrmshk/db_terraform_example.git
+$ curl -O https://sajpstorage.blob.core.windows.net/demo-asset-workshop2021/snippet/db_terraform_example.zip
 
+$ unzip db_terraform_example.zip
 $ cd db_terraform_example
 $ cd aws
 $ ls
@@ -22,6 +31,9 @@ $ ls
 README.md		variable.tf
 main.tf			secret.tfvars.template
 ```
+
+
+### デプロイに関するパラメータの設定
 
 `variable.tf`の変数を適宜設定します。
 
@@ -43,6 +55,8 @@ variable "aws_region" {
 ...
 ```
 
+### クレデンシャルファイルの準備
+
 続いて、`secret.tfavrs`のテンプレートから以下のDatabricksのアカウント情報を設定ファイルを作成していきます。
 パスワードなどを含むファイルになりますので、取り扱いには注意してください。
 
@@ -58,6 +72,8 @@ databricks_account_username = "your_accout_owner@example.com"
 databricks_account_password = "xxxxxxxxxxxxxxxxxxx"
 databricks_account_id       = "xxxxxxxx-xxxx-xxxxx-xxxxx-xxxxxxxxxxx"
 ```
+
+### workspaceの作成
 
 以上が設定が必要な項目になりますので、移行はTerraformを実行していきます。
 
@@ -81,6 +97,8 @@ databricks_host = "https://xxxxxxxxx-demo08jmll.cloud.databricks.com"
 databricks_instance_profile = "arn:aws:iam::134567891234:instance-profile/shared-instance-profile"
 databricks_token = <sensitive>
 ```
+
+### workspaceの削除
 
 環境を削除するには以下を実行する(実行には注意してください)
 ```bash
