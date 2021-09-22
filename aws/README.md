@@ -11,8 +11,8 @@ Databricksでは、運用現場で求められる機能をツールとして提�
 
 AWS上でのDatabricksは、以下の2つのレイヤで構成されます。
 
-* Control Plane: クラスタ管理、ノートブック、ジョブ管理、Hiveメタストアなど管理系のリソースが含まれる。Databricks管理のAWSアカウント内に配置。
-* Data Plane: クラスタ実体(EC2インスタンス)、処理実行結果、Spark/Deltaの処理対象データストレージ(S3バケツ)等のリソースが含まれる。ユーザー管理のAWSアカウント内に配置。
+* **Control Plane:** クラスタ管理、ノートブック、ジョブ管理、Hiveメタストアなど管理系のリソースが含まれる。Databricks管理のAWSアカウント内に配置。
+* **Data Plane:** クラスタ実体(EC2インスタンス)、処理実行結果、Spark/Deltaの処理対象データストレージ(S3バケツ)等のリソースが含まれる。ユーザー管理のAWSアカウント内に配置。
 
 Workspaceを作成・デプロイするには、
 
@@ -31,7 +31,7 @@ Workspaceを作成・デプロイするには、
 
 * [AWS CLI](https://aws.amazon.com/jp/cli/)の実行環境
 * AWS Credential(通常は`~/.aws/credentials`に作成される。上記のAWS CLIの実行のため)
-* Databricks Onwer Account: Databricks Console([accounts.cloud.databricks.com](https://accounts.cloud.databricks.com/))にログインできるユーザー名/パスワード
+* Databricks Owner Account: Databricks Console([accounts.cloud.databricks.com](https://accounts.cloud.databricks.com/))にログインできるユーザー名/パスワード
 * [Terraform](https://www.terraform.io/)実行環境
 
 
@@ -39,7 +39,7 @@ Workspaceを作成・デプロイするには、
 
 ### Terraformテンプレートのダウンロード
 
-Tarraformのテンプレートをダウンロードします。
+Terraformのテンプレートをダウンロードします。
 ```bash
 $ curl -O https://sajpstorage.blob.core.windows.net/demo-asset-workshop2021/snippet/db_terraform_example.zip
 
@@ -173,7 +173,7 @@ Destroy complete! Resources: 36 destroyed.
 
 ## Reference
 
-* Tarraform 
+* Terraform 
   - [Provision Databricks workspaces with Terraform (E2)](https://docs.databricks.com/dev-tools/terraform/e2-workspace.html)
   - [Databricks - Terraform Provider (docs in databricks.com)](https://docs.databricks.com/dev-tools/terraform/index.html)
   - [Databricks - Terraform Provider (docs in registry.terraform.io)](https://registry.terraform.io/providers/databrickslabs/databricks/latest/docs)
