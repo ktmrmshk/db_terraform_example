@@ -7,6 +7,25 @@ Databricksのworkspaceは一つの独立したDatabricks環境を提供します
 Databricksでは、運用現場で求められる機能をツールとして提供する[Labs Project](https://databricks.com/learn/labs)の一環で、[Databricsk Terraform Provider](https://github.com/databrickslabs/terraform-provider-databricks)を公開しています。
 このドキュメントでは、Terraformを用いてAWS上にDatabricksのworkspaceを構築する方法を説明いたします。
 
+## AWSのDatabricksデプロイメントの構成
+
+AWS上でのDatabricksは、以下の2つのレイヤで構成されます。
+
+* Control Plane: クラスタ管理、ノートブック、ジョブ管理、Hiveメタストアなど管理系のリソースが含まれる。Databricks管理のAWSアカウント内に配置。
+* Data Plane: クラスタ実体(EC2インスタンス)、処理実行結果、Spark/Deltaの処理対象データストレージ(S3バケツ)等のリソースが含まれる。ユーザー管理のAWSアカウント内に配置。
+
+Workspaceを作成・デプロイするには、
+
+1. ユーザーのAWSアカウントでクロスアカウントIAM Roleを作成
+2. 上記のIAM roleをDatabricks側に登録(委譲)
+3. ユーザーAWSアカウント内にVPC/Subnetなどのネットワークを構成
+4. DBFSルートとして使用するS3rootバケツの作成・ポリシーの作成
+
+などが必要になります。
+
+詳細は、[Databricks architecture overview](https://docs.databricks.com/getting-started/overview.html#e2-architecture)を参照ください。
+
+これらの設定をTerraformでコード化して運用・管理することが可能です。
 
 ## 必要な環境
 
@@ -150,6 +169,7 @@ Destroy complete! Resources: 36 destroyed.
  5. Bucket for Data writing
  6. Instance Profile for S3 Access from Clusters
 
+詳細はコードを参照ください。
 
 ## Reference
 
