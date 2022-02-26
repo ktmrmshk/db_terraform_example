@@ -158,6 +158,13 @@ resource "aws_vpc_endpoint" "s3" {
 // ---- 4. Workspace ----
 
 resource "databricks_mws_workspaces" "this" {
+  depends_on = [
+    databricks_mws_networks.this,
+    databricks_mws_storage_configurations.this,
+    databricks_mws_networks.this
+  ]
+
+
   provider        = databricks.mws
   account_id      = var.databricks_account_id
   aws_region      = var.aws_region
@@ -188,7 +195,7 @@ provider "databricks" {
 resource "databricks_token" "pat" {
   provider         = databricks.created_workspace
   comment          = "Terraform Provisioning"
-  lifetime_seconds = 86400
+  #lifetime_seconds = 86400
 }
 
 // export token for integration tests to run on
@@ -327,7 +334,7 @@ data "aws_iam_policy_document" "pass_role_for_s3_access" {
 }
 
 resource "aws_iam_policy" "pass_role_for_s3_access" {
-  name   = "shared-pass-role-for-s3-access"
+  name   = "${local.prefix}-shared-pass-role-for-s3-access"
   path   = "/"
   policy = data.aws_iam_policy_document.pass_role_for_s3_access.json
 }
@@ -340,7 +347,7 @@ resource "aws_iam_role_policy_attachment" "cross_account" {
 }
 
 resource "aws_iam_instance_profile" "shared" {
-  name = "shared-instance-profile"
+  name = "${local.prefix}-shared-ec2-role-for-s3"
   role = aws_iam_role.role_for_s3_access.name
 }
 

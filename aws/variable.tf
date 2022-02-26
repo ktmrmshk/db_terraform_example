@@ -29,7 +29,7 @@ variable "tags" {
 }
 
 variable "cidr_block" {
-  default = "10.4.0.0/16"
+  default = "10.99.0.0/16"
 }
 
 
@@ -43,13 +43,13 @@ variable "read_write_s3_buckets" {
 variable "read_only_s3_buckets" {
   description = "bucket name list of read_only_access: ex) [\"s3-bucket-readonly1\", \"s3-bucket-readonly2\"]"
   type        = list(string)
-  default     = ["s3-bucket-readonly1", "s3-bucket-readonly2"]
-  #default     = []
+  #default     = ["s3-bucket-readonly1", "s3-bucket-readonly2"]
+  default     = []
 
 }
 
 variable "user_prefix" {
-  default = "demo"
+  default = "test123"
 }
 
 resource "random_string" "naming" {
